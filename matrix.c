@@ -16,7 +16,7 @@ int matrix2[3][3]={
 	{1,2,3}
 };
 
-
+// a matrix multiplication function, takes in two matrices with their rows and columns
 void matMul(int *matrixA, int rowsA, int colsA, int *matrixB, int rowsB, int colsB){
 	/*
 	for (int i = 0; i < rowsA; i++) {
