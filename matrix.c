@@ -19,23 +19,12 @@ int matrix2[3][3]={
 };
 
 // a matrix multiplication function, takes in two matrices with their rows and columns
-void matMul(int *matrixA, int rowsA, int colsA, int *matrixB, int rowsB, int colsB){
-	/*
-	for (int i = 0; i < rowsA; i++) {
-    	for (int j = 0; j < colsA; j++) {
-	      //printf(matrix[i][j]);
-    		//printf("%d %d %d\n", i, cols, j);
-	      	printf("%d ", *(matrixA + i * colsA + j));
-	      	printf(" ");
-    	}
-    printf("\n");
-	}
-	*/
+void matMult(int *matrixA, int rowsA, int colsA, int *matrixB, int rowsB, int colsB){
 
 	if (colsA != rowsB) {
     printf("Matrix multiplication not possible\n\n");
     return;
-  }
+    }
 
 
 	int resultantMatrix[rowsA][colsB]; // Adjust size based on your matrices
@@ -69,9 +58,12 @@ void matMul(int *matrixA, int rowsA, int colsA, int *matrixB, int rowsB, int col
 }
 
 
+
+
+
 int main(int argc, char const *argv[])
 {
-    int numberOfLayers = 3;
+    
 
     int total = sizeof(matrix1)/sizeof(matrix1[0][0]);
     int matrows = sizeof(matrix1)/sizeof(matrix1[0]);
@@ -82,31 +74,12 @@ int main(int argc, char const *argv[])
     int matcols1 = total1/matrows1;
 	
 
-    matMul(*matrix1, matrows, matcols, *matrix2, matrows1, matcols1);
+    //matMul(*matrix1, matrows, matcols, *matrix2, matrows1, matcols1);
 
-    char data[] = "\x43\xad\xfc\x3e\x71\xa2\xe5\x3e\xa0\x61\x3f\x3d\xc5\x11\x07\x40\x00\x00\x00\x00\xd4\x60\x05\x40\x00\x00\x00\x00\x55\x44\x6b\x3f\x00\x00\x00\x00\x00\x00\x00\x00\xa6\x2f\xf5\x3e\x00\x00\x00\x00\xb2\xd6\x03\x3f\x00\x00\x00\x00\xde\x2a\xe6\x3d\x00\x00\x00\x00";
-    int num_bytes = strlen(data);  // Get the number of bytes in the data
-
-    // Assuming we know there are 16 floats (4x4 matrix)
-    int num_elements = num_bytes / sizeof(float);  // Calculate the number of floats
-    float *float_data = (float *)data;  // Interpret the data as floats
-
-    // Print the matrix
-    int nrows = 1, ncols = 16;  // Dimensions of the matrix
-    printf("Matrix:\n");
-    for (int i = 0; i < nrows; i++) {
-        for (int j = 0; j < ncols; j++) {
-            printf("%.5f ", float_data[i * ncols + j]);
-        }
-        printf("\n");
-    }
-
-    printf("---------Starting string parsing----------\n");
-    //printf("this is %c", testing[1]);
-    printf("this is length in main file %d\n", sizeof(testing));
     int lengthOfArray = sizeof(testing);
+    //printf("\n\nheavy tests ----------------------------------\n\n");
     //parseModel(testing, lengthOfArray);
-    
+    //printf("\n\nheavy tests ----------------------------------\n\n");
     //char* address = getMemAddress(testing, 2, sizeof(testing));
     //printf("this is the mem address of second $ %c", *(address+2));
     int totalLayers = 5; // total number of dollar signs(layers)
@@ -117,9 +90,38 @@ int main(int argc, char const *argv[])
     for (int i = 1; i <= totalLayers; i++) {  // for some reason, i=0 is not working, meaning that address[0] gives faulty value, very strange
         printf("%d\n", address[i]);
     }
-    getTensor(address[5], testing, lengthOfArray);
+    float testData[] = {0.72779332,  1.12606976, -0.31331522, -0.05345183, -0.02599893};
+    float* testDataPointer = testData;
+    //getTensor(address[2], testing, lengthOfArray);
+    float* weightArray = getWeightTensor(address[1], testing, lengthOfArray, 5, 16);
+    //printf("--> in main program: %0.5f\n", weightArray[0 * 16 + 1]);
+    float* biasArray = getBiasTensor(address[1], testing, lengthOfArray, 16, 1);
+    
+    float* result = matMul(testDataPointer, 1, 5, weightArray, 5, 16);
+    // get a known array of (5,5), test the values using python and then test matMul here
+    float* result1 = (float*)malloc(16*sizeof(float));
+    for (int i = 0; i < 16; i++) {
+        result1[i] = result[i] + biasArray[i];
+    }
+
+    // a very crude ReLu
+    for (int i = 0; i < 16; i++) {
+        if(result1[i]<0){
+            result1[i] = 0;
+        }
+    }
+
+    for (int i = 0; i < 16; i++) {
+        printf("%0.5f ", result1[i]);
+    }
+    
+    
+    free(result);
+    free(result1);
+    free(biasArray);
+    free(weightArray);
+    //free(result);
+
 	return 0;
 }
-
-// issue is i cant find the correct syntax to write binary string
 
