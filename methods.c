@@ -575,7 +575,6 @@ float* getBiasTensor(int posOfDollar, char* testing, int lengthOrig, int finalRo
         return NULL;
 }
 
-// i don't know if this is working fine or not, i'll have to check first if the values coming in are correct and then their multiplications
 float* matMul(float* matrixA, int matrixArows, int matrixAcols, float* matrixB, int matrixBrows, int matrixBcols){
     
     //printf("--> in methods function: %0.5f\n", matrixB[0 * matrixBcols + 1]);
