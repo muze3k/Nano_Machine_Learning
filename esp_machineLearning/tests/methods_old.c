@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "methods.h"
 
-
+/*
 
 int* getMemAddress(char* str, int n, int size){
     int* dollarSign = malloc(n * sizeof(int));
@@ -243,4 +243,4 @@ float* getBiasTensor(int posOfDollar, char* testing, int lengthOrig, int finalRo
 }
 
 
-
+*/
