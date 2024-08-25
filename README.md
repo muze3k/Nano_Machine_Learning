@@ -1,6 +1,6 @@
 # Nano_Machine_Learning
 
-Library for running inference on esp32 using the model trained through conventional tensorflow/keras libraries. The model is transformed into raw bytes and stored in esp32.
+Library for running inference on esp32 using the model trained through conventional tensorflow/keras libraries. The model is transformed into raw bytes and stored in esp32. Main code inside esp_machineLearning folder.
 
 To-do list:
 - [x] Dense matmul
